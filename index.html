@@ -22,6 +22,10 @@
             font-size: 1.25rem;
         }
 
+        input.form-control::placeholder {
+            color: #777;
+        }
+
         .btn-primary, .btn-primary:visited, .btn-primary:focus {
             background-color: #007EA7;
             border-color: #007EA7;
@@ -61,7 +65,7 @@
 <div class="container">
     <br>
     <h1 class="display-3 mt-4 mb-2 text-success">Startup Equity Calculator</h1>
-    <p class="lead font-weight-bold pb-2">No-bullshit startup equity calculator.</p>
+    <p class="lead font-weight-bold">No-bullshit stock option calculator.</p>
     <br>
     <form id="calculator">
         <div class="row form-group">
@@ -207,7 +211,7 @@
                                 <span class="input-group-text">$</span>
                             </div>
                             <input type="text" required class="form-control" name="ipoValuation"
-                                   value="1,000,000,000">
+                                   placeholder="1,000,000,000">
                         </div>
                     </div>
                 </div>
@@ -236,13 +240,12 @@
             <div class="col"></div>
         </div>
     </form>
-    <div class="row">
-        <div class="col"></div>
-        <table id="results" class="table col w-auto">
+    <div class="row text-center">
+        <table id="results" class="table">
             <thead>
             <tr>
                 <th scope="col" class="text-center">Funding round</th>
-                <th scope="col" class="text-center">Company valuation</th>
+                <th scope="col" class="text-center">Valuation</th>
                 <th scope="col" class="text-center">Total equity ($)</th>
                 <th scope="col" class="text-center">Annual equity ($)</th>
                 <th scope="col" class="text-center">Annual total comp ($)</th>
@@ -258,7 +261,6 @@
             </tr>
             </tbody>
         </table>
-        <div class="col"></div>
     </div>
     <div class="row pt-4 pb-4">
         <div class="col text-center">
@@ -307,12 +309,30 @@
                 return;
             }
         }
+        const oldValue = event.target.value;
         event.target.setCustomValidity("");
+        const start = event.target.selectionStart;
         event.target.value = number.toLocaleString('en-US', {maximumFractionDigits: 8});
+        const newValue = event.target.value;
+
+        const oldNumCommas = oldValue.substring(0, start).split(',').length;
+        const newNumCommas = newValue.substring(0, start).split(',').length;
+        const newPos = start + newNumCommas - oldNumCommas
+        event.target.setSelectionRange(newPos, newPos);
+
+        // Stash value for next time
+        event.oldValue = newValue;
     }
 
-    function toCurrencyString(number) {
-        return number.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+    function toCurrencyString(number, sigFigs) {
+        return number.toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumSignificantDigits: sigFigs, minimumFractionDigits:0, maximumFractionDigits: 0});
+    }
+
+    function toRoundedCurrencyString(number) {
+        const suffixes = ['', 'K', 'M', 'B', 'T'];
+        let suffixIdx = 0;
+        for (; suffixIdx<suffixes.length, number >= 1000; suffixIdx++, number /= 1000) {}
+        return toCurrencyString(number, 3) + suffixes[suffixIdx];
     }
 
     function getRoundName(totalNumRounds, roundNumber) {
@@ -330,7 +350,7 @@
         if (comp) {
             return "<tr>" +
                 `<td>${round}</td>` +
-                `<td class='text-right'>${toCurrencyString(comp.companyValuation)}</td>` +
+                `<td class='text-right'>${toRoundedCurrencyString(comp.companyValuation, 4)}</td>` +
                 `<td class='text-right'>${toCurrencyString(comp.equityDollars)}</td>` +
                 `<td class='text-right'>${toCurrencyString(comp.yearlyEquityDollars)}</td>` +
                 `<td class='text-right'>${toCurrencyString(comp.yearlyTotalCompDollars)}</td>` +
