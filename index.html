@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Startup Equity Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Mulish&display=swap"
+          rel="stylesheet">
+    <link rel="icon" type="image/png" href="icons8-magic-crystal-ball-48.png">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        label.col-form-label {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        input.form-control, select {
+            font-size: 1.25rem;
+        }
+
+        .btn-primary, .btn-primary:visited, .btn-primary:focus {
+            background-color: #007EA7;
+            border-color: #007EA7;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover, .btn-primary:active {
+            background-color: #00B8F5 !important;
+            border-color: #00B8F5 !important;
+        }
+
+        body {
+            font-family: 'Mulish', sans-serif;
+        }
+
+        h1, #ipoValueDollars {
+            font-family: 'Aldrich', sans-serif;
+        }
+
+        h2, h3, h4, h5, h6 {
+            font-family: 'Mulish', sans-serif;
+            font-weight: bolder;
+        }
+
+        p {
+            font-size: 18px;
+            font-family: 'Mulish', sans-serif;;
+        }
+
+        table {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <br>
+    <h1 class="display-3 mt-4 mb-2 text-success">Startup Equity Calculator</h1>
+    <p class="lead font-weight-bold pb-2">No-bullshit startup equity calculator.</p>
+    <br>
+    <form id="calculator">
+        <div class="row form-group">
+            <div class="col form-group">
+                <h2>Company Info</h2>
+                <hr>
+                <div class="form-group row">
+                    <div class="col">
+                        <label class="col-form-label" for="fundingRound">Current funding round</label>
+                        <p class="font-italic">Company's most recent funding round. Get this from Crunchbase or the
+                            recruiter.</p>
+                    </div>
+                    <div class="col">
+                        <select name="fundingRound" id="fundingRound" required>
+                            <option disabled="" selected="" value="" hidden=""> -- select --</option>
+                            <option value="0">Seed</option>
+                            <option value="1">Series A</option>
+                            <option value="2">Series B</option>
+                            <option value="3">Series C</option>
+                            <option value="4">Series D</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label class="col-form-label"
+                               for="companyValuation">Current valuation</label>
+                        <p class="font-italic">Company valuation as of most recent funding round. Get this from
+                            Crunchbase or the recruiter.</p>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" required class="form-control" id="companyValuation"
+                                   name="companyValuation"
+                                   placeholder="100,000,000">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label class="col-form-label"
+                               for="totalNumShares"># of outstanding shares</label>
+                        <p class="font-italic">Total number of shares issued by the company. Get this information from
+                            the recruiter.</p>
+                    </div>
+                    <div class="col">
+                        <input type="text" required class="form-control" name="totalNumShares" id="totalNumShares"
+                               placeholder="1,000,000">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md form-group">
+                <h2>Your Stock Grant</h2>
+                <hr>
+                <div class="form-group row">
+                    <div class="col">
+                        <label class="col-form-label">Your # of stock options</label>
+                        <p class="font-italic">Number of stock options in your stock grant.</p>
+                    </div>
+                    <div class="input-group col">
+                        <input type="text" required class="form-control" name="userNumShares" placeholder="1,000">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label class="col-form-label">Strike price</label>
+                        <p class="font-italic">What you pay to exercise a single stock option.</p>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" required class="form-control" name="userStrikePrice" id="userStrikePrice"
+                                   placeholder="1.00">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label class="col-form-label" for="vestingPeriodYears">Vesting period</label>
+                        <p class="font-italic">Typically 4 years.</p>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <input type="text" required class="form-control" id="vestingPeriodYears"
+                                   name="vestingPeriodYears" value="4">
+                            <div class="input-group-append">
+                                <span class="input-group-text">years</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col form-group">
+                <h2>Projection</h2>
+                <hr>
+                <div class="form-group row">
+                    <label class="col col-form-label" for="userCashCompensation">Annual cash compensation</label>
+                    <div class="col">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" required class="form-control" id="userCashCompensation"
+                                   name="userCashCompensation"
+                                   placeholder="100,000">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label class="col-form-label" for="numberOfRoundsToIPO">
+                            Additional funding rounds to IPO</label>
+                        <p class="font-italic">Example: The company is currently Series C. You expect a Series D (1),
+                            Series E (2), then IPO (3). This is 3 rounds to IPO.</p>
+                    </div>
+                    </label>
+                    <div class="col">
+                        <div class="input-group">
+                            <input type="text" required class="form-control" name="numberOfRoundsToIPO"
+                                   id="numberOfRoundsToIPO"
+                                   value="3">
+                            <div class="input-group-append">
+                                <span class="input-group-text">rounds</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col col-form-label"
+                           title="Estimated company value at time of IPO">IPO valuation</label>
+                    <div class="col">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" required class="form-control" name="ipoValuation"
+                                   value="1,000,000,000">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col form-group">
+                <h2>Projection</h2>
+                <hr>
+                <div class="row form-group">
+                    <div class="col-8">
+                        <h3 class="font-weight-bold">If the company IPOs, your options will be worth:</h3>
+                    </div>
+                    <div class="col">
+                        <h3 class="font-weight-bold" id="ipoValueDollars">???</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col"></div>
+            <div class="col-5 pb-4">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Calculate</button>
+                <br>
+            </div>
+            <div class="col"></div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col"></div>
+        <table id="results" class="table col w-auto">
+            <thead>
+            <tr>
+                <th scope="col" class="text-center">Funding round</th>
+                <th scope="col" class="text-center">Company valuation</th>
+                <th scope="col" class="text-center">Total equity ($)</th>
+                <th scope="col" class="text-center">Annual equity ($)</th>
+                <th scope="col" class="text-center">Annual total comp ($)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="col"></div>
+    </div>
+    <div class="row pt-4 pb-4">
+        <div class="col text-center">
+            <p>
+                <br>
+                Made with Love by Andrew Wang
+                <br/>
+                <a href="http://umbrant.com">umbrant.com</a>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+<script>
+    $("form#calculator input[type=text]").on("change", isValidNumber).on("keyup", isValidNumber).on("load", isValidNumber);
+
+    function isValidNumber(event) {
+        const text = event.target.value;
+        if (text.match(/\.0*$/)) {
+            return text;
+        }
+
+        const noCommas = text.replace(/,/g, '');
+        const number = Number(noCommas);
+        if (isNaN(number)) {
+            event.target.setCustomValidity("Must be valid number");
+            return;
+        }
+        if (number <= 0) {
+            event.target.setCustomValidity("Must be greater than zero");
+            return;
+        }
+        if (event.target.id === 'numberOfRoundsToIPO') {
+            if (!Number.isInteger(number)) {
+                event.target.setCustomValidity("Must be an integer value");
+                return;
+            }
+        }
+        event.target.setCustomValidity("");
+        event.target.value = number.toLocaleString('en-US', {maximumFractionDigits: 8});
+    }
+
+    function toCurrencyString(number) {
+        return number.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+    }
+
+    function getRoundName(totalNumRounds, roundNumber) {
+        if (roundNumber === 0) {
+            return "Seed";
+        }
+        if (roundNumber === totalNumRounds - 1) {
+            return "IPO";
+        }
+        const offset = roundNumber - 1;
+        return "Series " + String.fromCharCode("A".charCodeAt(0) + offset);
+    }
+
+    function makeRow(round, comp) {
+        if (comp) {
+            return "<tr>" +
+                `<td>${round}</td>` +
+                `<td class='text-right'>${toCurrencyString(comp.companyValuation)}</td>` +
+                `<td class='text-right'>${toCurrencyString(comp.equityDollars)}</td>` +
+                `<td class='text-right'>${toCurrencyString(comp.yearlyEquityDollars)}</td>` +
+                `<td class='text-right'>${toCurrencyString(comp.yearlyTotalCompDollars)}</td>` +
+                "</tr>";
+        }
+        return "";
+    }
+
+    function displayCompensation(numberOfRounds, compensationPerRound) {
+        $("table#results tbody").empty();
+        const rounds = Array(...compensationPerRound.keys());
+        for (const round of rounds) {
+            $("table#results tbody").append(makeRow(getRoundName(numberOfRounds, round), compensationPerRound.get(round)));
+        }
+    }
+
+    $("form#calculator").submit(handleSubmit);
+
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        const array = $(this).serializeArray();
+        const values = {}
+        for (const item of array) {
+            values[item['name']] = Number(item['value'].replace(/,/g, ''));
+        }
+
+        const {companyValuation, totalNumShares, fundingRound, userNumShares, userStrikePrice, vestingPeriodYears, userCashCompensation, numberOfRoundsToIPO, ipoValuation} = values;
+        const numberOfRounds = 1 + fundingRound + numberOfRoundsToIPO
+        console.log({fundingRound, numberOfRoundsToIPO, numberOfRounds})
+        // Assume dilution decreases over time
+        const dilutionAfterRound = [];
+        {
+            let i = 0;
+            for (let k = 0; i < numberOfRounds, k < 1; i++, k++) {
+                dilutionAfterRound.push(0.25);
+            }
+            for (let k = 0; i < numberOfRounds, k < 3; i++, k++) {
+                dilutionAfterRound.push(0.20);
+            }
+            for (let k = 0; i < numberOfRounds, k < 3; i++, k++) {
+                dilutionAfterRound.push(0.15);
+            }
+            for (; i < numberOfRounds; i++) {
+                dilutionAfterRound.push(0.10);
+            }
+        }
+
+        // Linear model for valuation change
+        const valuationPerRound = [];
+        {
+            for (let i = 0; i < fundingRound; i++) {
+                valuationPerRound.push(0);
+            }
+            const totalSteps = numberOfRounds - fundingRound - 1;
+            const valuationChange = ipoValuation - companyValuation;
+            const slope = valuationChange / totalSteps;
+            for (let i = 0; i < numberOfRounds - fundingRound; i++) {
+                valuationPerRound.push(companyValuation + (i * slope));
+            }
+        }
+
+        const costToStrikeDollars = userStrikePrice * userNumShares;
+
+        const compensationPerRound = new Map();
+        let runningDilution = 1;
+
+        for (let i = 0; i < numberOfRounds; i++) {
+            if (i < fundingRound) {
+                compensationPerRound.set(i, null);
+                continue;
+            }
+            const comp = {}
+            comp.companyValuation = valuationPerRound[i];
+            comp.equityPercentage = userNumShares / (totalNumShares * runningDilution);
+            comp.equityDollars = comp.companyValuation * userNumShares / (totalNumShares * runningDilution) - costToStrikeDollars;
+            comp.yearlyEquityDollars = comp.equityDollars / vestingPeriodYears;
+            comp.yearlyTotalCompDollars = comp.yearlyEquityDollars + userCashCompensation;
+            compensationPerRound.set(i, comp);
+
+            runningDilution *= (1 + dilutionAfterRound[i]);
+        }
+
+        displayCompensation(numberOfRounds, compensationPerRound);
+        $("#ipoValueDollars").addClass("text-success").text(toCurrencyString(compensationPerRound.get(numberOfRounds - 1).equityDollars));
+    }
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+</script>
+</body>
+</html>
