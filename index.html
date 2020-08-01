@@ -1,6 +1,15 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-4601421-3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-4601421-3');
+    </script>
     <title>Startup Equity Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Mulish&display=swap"
           rel="stylesheet">
@@ -86,6 +95,7 @@
                             <option value="2">Series B</option>
                             <option value="3">Series C</option>
                             <option value="4">Series D</option>
+                            <option value="4">Series E</option>
                         </select>
                     </div>
                 </div>
@@ -127,8 +137,8 @@
                 <hr>
                 <div class="form-group row">
                     <div class="col">
-                        <label class="col-form-label">Your # of stock options</label>
-                        <p class="font-italic">Number of stock options in your stock grant.</p>
+                        <label class="col-form-label"># of stock options</label>
+                        <p class="font-italic">Number of stock options in your stock grant.<br/>If you have RSUs, this calculator is not for you.</p>
                     </div>
                     <div class="input-group col">
                         <input type="text" required class="form-control" name="userNumShares" placeholder="1,000">
@@ -152,7 +162,7 @@
                 <div class="form-group row">
                     <div class="col">
                         <label class="col-form-label" for="vestingPeriodYears">Vesting period</label>
-                        <p class="font-italic">Typically 4 years.</p>
+                        <p class="font-italic">Usually 4 years.</p>
                     </div>
                     <div class="col">
                         <div class="input-group">
@@ -203,14 +213,18 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col col-form-label"
-                           title="Estimated company value at time of IPO">IPO valuation</label>
+                    <div class="col">
+                        <label class="col-form-label"
+                               for="ipoValuation"
+                               title="">IPO valuation</label>
+                        <p class="font-italic">Typically, a company needs to be worth &geq;$1B to IPO.</p>
+                    </div>
                     <div class="col">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">$</span>
                             </div>
-                            <input type="text" required class="form-control" name="ipoValuation"
+                            <input type="text" required class="form-control" id="ipoValuation" name="ipoValuation"
                                    placeholder="1,000,000,000">
                         </div>
                     </div>
@@ -266,9 +280,9 @@
         <div class="col text-center">
             <p>
                 <br>
-                Made with Love by Andrew Wang
+                Made by <a href="https://umbrant.com">Andrew Wang</a>.
                 <br/>
-                <a href="http://umbrant.com">umbrant.com</a>
+                Feedback? Questions? <a href="mailto:andrew@umbrant.com">Send me an email</a>.
             </p>
         </div>
     </div>
@@ -289,7 +303,7 @@
 
     function isValidNumber(event) {
         const text = event.target.value;
-        if (text.match(/\.0*$/)) {
+        if (text.match(/\.\d*$/)) {
             return text;
         }
 
@@ -309,6 +323,12 @@
                 return;
             }
         }
+        if (event.target.id === 'ipoValuation') {
+            if (number > 1000 * 1000 * 1000 * 1000) {
+                event.target.setCustomValidity("Let's be realistic, shall we?")
+                return;
+            }
+        }
         const oldValue = event.target.value;
         event.target.setCustomValidity("");
         const start = event.target.selectionStart;
@@ -325,13 +345,20 @@
     }
 
     function toCurrencyString(number, sigFigs) {
-        return number.toLocaleString('en-US', {style: 'currency', currency: 'USD', maximumSignificantDigits: sigFigs, minimumFractionDigits:0, maximumFractionDigits: 0});
+        return number.toLocaleString('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            maximumSignificantDigits: sigFigs,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        });
     }
 
     function toRoundedCurrencyString(number) {
         const suffixes = ['', 'K', 'M', 'B', 'T'];
         let suffixIdx = 0;
-        for (; suffixIdx<suffixes.length, number >= 1000; suffixIdx++, number /= 1000) {}
+        for (; suffixIdx < suffixes.length, number >= 1000; suffixIdx++, number /= 1000) {
+        }
         return toCurrencyString(number, 3) + suffixes[suffixIdx];
     }
 
@@ -437,6 +464,7 @@
         displayCompensation(numberOfRounds, compensationPerRound);
         $("#ipoValueDollars").addClass("text-success").text(toCurrencyString(compensationPerRound.get(numberOfRounds - 1).equityDollars));
     }
+
     $(function () {
         $('[data-toggle="popover"]').popover()
     })
