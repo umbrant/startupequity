@@ -309,8 +309,15 @@
 
     function isValidNumber(event) {
         const text = event.target.value;
+
+        if (!text.match(/^[0-9,]+\.?[0-9]*$/)) {
+            event.target.setCustomValidity('Must be valid number')
+            return;
+        }
+
         if (text.match(/\.\d*$/)) {
-            return text;
+            event.target.setCustomValidity("");
+            return;
         }
 
         const noCommas = text.replace(/,/g, '');
@@ -413,7 +420,6 @@
 
         const {companyValuation, totalNumShares, fundingRound, userNumShares, userStrikePrice, vestingPeriodYears, userCashCompensation, numberOfRoundsToIPO, ipoValuation} = values;
         const numberOfRounds = 1 + fundingRound + numberOfRoundsToIPO
-        console.log({fundingRound, numberOfRoundsToIPO, numberOfRounds})
         // Assume dilution decreases over time
         const dilutionAfterRound = [];
         {
