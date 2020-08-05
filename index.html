@@ -5,12 +5,16 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-4601421-3"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-4601421-3');
     </script>
-    <title>Startup Equity Calculator</title>
+    <title>equity.cool - Stock Option Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Mulish&display=swap"
           rel="stylesheet">
     <link rel="icon" type="image/png" href="icons8-magic-crystal-ball-48.png">
@@ -73,7 +77,7 @@
 
 <div class="container">
     <br>
-    <h1 class="display-3 mt-4 mb-2 text-success">Startup Equity Calculator</h1>
+    <h1 class="display-3 mt-4 mb-2 text-success">equity.cool</h1>
     <p class="lead font-weight-bold">
         No-bullshit stock option calculator.
         Questions? <a href="https://www.umbrant.com/startup-equity-calculator-faq/">See the FAQ</a>.
@@ -100,6 +104,7 @@
                             <option value="3">Series C</option>
                             <option value="4">Series D</option>
                             <option value="5">Series E</option>
+                            <option value="6">Series F</option>
                         </select>
                     </div>
                 </div>
@@ -126,8 +131,9 @@
                         <label class="col-form-label"
                                for="totalNumShares"># of outstanding shares</label>
                         <p class="font-italic">Total number of shares issued by the company.
-                            <a href="https://www.umbrant.com/startup-equity-calculator-faq/#totalnumberofshares">Get this from
-                            the recruiter, corporate lawyer, or finance team.</a></p>
+                            <a href="https://www.umbrant.com/startup-equity-calculator-faq/#totalnumberofshares">Get
+                                this from
+                                the recruiter, corporate lawyer, or finance team.</a></p>
                     </div>
                     <div class="col">
                         <input type="text" required class="form-control" name="totalNumShares" id="totalNumShares"
@@ -143,7 +149,9 @@
                 <div class="form-group row">
                     <div class="col">
                         <label class="col-form-label"># of stock options</label>
-                        <p class="font-italic">Number of stock options in your stock grant.<br/><a href="https://www.umbrant.com/startup-equity-calculator-faq/#rsus">If you have RSUs, see the FAQ</a>.</p>
+                        <p class="font-italic">Number of stock options in your stock grant.<br/><a
+                                href="https://www.umbrant.com/startup-equity-calculator-faq/#rsus">If you have RSUs, see
+                            the FAQ</a>.</p>
                     </div>
                     <div class="input-group col">
                         <input type="text" required class="form-control" name="userNumShares" placeholder="1,000">
@@ -185,6 +193,7 @@
             <div class="col form-group">
                 <h2>Projection</h2>
                 <hr>
+                <p>If you're not sure, try out different values and make your best guess!</p>
                 <div class="form-group row">
                     <label class="col col-form-label" for="userCashCompensation">Annual cash compensation</label>
                     <div class="col">
@@ -202,15 +211,18 @@
                     <div class="col">
                         <label class="col-form-label" for="numberOfRoundsToIPO">
                             Additional funding rounds through IPO</label>
-                        <p class="font-italic">Example: The company is currently Series C. You expect a Series D (1),
-                            Series E (2), then IPO (3). This is 3 rounds through IPO.</p>
+                        <p class="font-italic">Example: The company is currently Series D. You expect a Series E (1),
+                            Series F (2), then IPO (3). This is 3 rounds through IPO.
+                            <br>
+                            <a href="https://www.umbrant.com/startup-equity-calculator-faq/#estimateIPO">See this FAQ answer for more on this topic</a>.
+                        </p>
                     </div>
                     </label>
                     <div class="col">
                         <div class="input-group">
                             <input type="text" required class="form-control" name="numberOfRoundsToIPO"
                                    id="numberOfRoundsToIPO"
-                                   value="3">
+                                   placeholder="3">
                             <div class="input-group-append">
                                 <span class="input-group-text">rounds</span>
                             </div>
@@ -306,6 +318,17 @@
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous"></script>
 <script>
+    $("form#calculator select#fundingRound").on("change", (event) => {
+        // auto-fill the numberOfRoundsToIPO based on this
+        const element = $("form#calculator #numberOfRoundsToIPO");
+        if (element.val() === '') {
+            const fundingRound = Number(event.target.value);
+            // 0 1 2 3 4 5 6 7
+            // S A B C D E F I
+            const expectedIPORound = Math.max(7, fundingRound + 1);
+            element.val(expectedIPORound - fundingRound);
+        }
+    });
     $("form#calculator input[type=text]").on("change", isValidNumber).on("keyup", isValidNumber).on("load", isValidNumber);
 
     function isValidNumber(event) {
